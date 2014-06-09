@@ -9,6 +9,7 @@ import javax.net.ssl.HostnameVerifier;
 import br.ufrn.hospital.DAO.DAOFactory;
 import br.ufrn.hospital.DAO.HibernateDAOFactory;
 import br.ufrn.hospital.DAO.PacienteDAOInterface;
+import br.ufrn.hospital.GUI.MonitoramentoPacienteUI;
 import br.ufrn.hospital.exceptions.ComunicationException;
 import br.ufrn.hospital.exceptions.ControllerException;
 import br.ufrn.hospital.exceptions.DAOException;
@@ -18,12 +19,13 @@ import br.ufrn.hospital.subscriber.ConcreteSubscriber;
 import br.ufrn.model.Paciente;
 
 public class HospitalController {
-
+	
 	private final DAOFactory daoFactory = new HibernateDAOFactory();
 
 	private final PacienteDAOInterface pacienteDAO = daoFactory
 			.getPacienteDAO();
 
+	private MonitoramentoPacienteUI telaMonitoramento; 
 	private final WaitNewTopics waitNewTopics;
 
 	private static final Map<String, Paciente> topicsPacientes = Collections
@@ -84,10 +86,10 @@ public class HospitalController {
 	}
 
 	public void tratarNotificacaoPaciente(String topico, String mensagem) {
-
+		
 		Paciente p = topicsPacientes.get(topico);
-
-		System.out.println("Notificação: " + p.getNome() + "  \n" + mensagem);
+		telaMonitoramento.exibirAlerta(p, mensagem);
+		//System.out.println("Notificação: " + p.getNome() + "  \n" + mensagem);
 		
 		
 		/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
